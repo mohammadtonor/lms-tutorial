@@ -1,7 +1,12 @@
 import { IconBadge } from "@/components/icon-badge";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
-import { CircleDollarSign, LayoutDashboard, ListChecks,File } from "lucide-react";
+import {
+  CircleDollarSign,
+  LayoutDashboard,
+  ListChecks,
+  File,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
@@ -9,6 +14,7 @@ import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price.form";
 import { AttachmentForm } from "./_components/Attachment-form";
+import { ChapterForm } from "./_components/chapters-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const userId = auth();
@@ -22,12 +28,17 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       id: params.courseId,
     },
     include: {
+      chapters: {
+        orderBy: {
+          position: "asc",
+        },
+      },
       attachment: {
         orderBy: {
-          createdAt: "desc"
-        }
-      }
-    }
+          createdAt: "desc",
+        },
+      },
+    },
   });
 
   const categories = await db.category.findMany({
@@ -46,6 +57,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.imageUrl,
     course.price,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
@@ -69,18 +81,9 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">Custome your course details</h2>
           </div>
-          <TitleForm
-            initialData={course}
-            courseId={course.id}
-          />
-          <DescriptionForm
-            initialData={course}
-            courseId={course.id} 
-          />
-          <ImageForm
-            initialData={course} 
-            courseId={course.id}
-          />
+          <TitleForm initialData={course} courseId={course.id} />
+          <DescriptionForm initialData={course} courseId={course.id} />
+          <ImageForm initialData={course} courseId={course.id} />
           <CategoryForm
             initialData={course}
             courseId={course.id}
@@ -97,32 +100,22 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <h2 className="text-xl">Course chapters</h2>
             </div>
             <div>
-              TODO: Chapter
+              <ChapterForm initialData={course} courseId={course.id} />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={CircleDollarSign} />
-              <h2 className="text-xl">
-                Sell your course
-              </h2>
+              <h2 className="text-xl">Sell your course</h2>
             </div>
-            <PriceForm
-            initialData={course} 
-            courseId={course.id}
-           />
+            <PriceForm initialData={course} courseId={course.id} />
           </div>
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={File} />
-              <h2 className="text-xl">
-                Resource & Attachment 
-              </h2>
+              <h2 className="text-xl">Resource & Attachment</h2>
             </div>
-            <AttachmentForm
-              initialData={course} 
-              courseId={course.id}
-           />
+            <AttachmentForm initialData={course} courseId={course.id} />
           </div>
         </div>
       </div>
