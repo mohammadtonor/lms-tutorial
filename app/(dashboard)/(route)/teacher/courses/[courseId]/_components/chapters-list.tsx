@@ -44,8 +44,11 @@ export const ChaptersList = ({
 
     const items = Array.from(chapters);
 
+    console.log(items)
     const [reorderedItems] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItems);
+
+    console.log(reorderedItems);
 
     const startIndex = Math.min(result.source.index, result.destination.index);
     const endInsex = Math.max(result.source.index, result.destination.index);
