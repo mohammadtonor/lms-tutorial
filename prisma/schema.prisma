@@ -115,10 +115,10 @@ model Purchase {
   @@index([courseId])
 }
 
-model StripeCustumer {
+model stripeCustomer {
   id String @id @default(uuid())
   userId String @unique
-  stipeCustumerId String @unique
+  stripeCustomerId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
