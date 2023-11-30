@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-export const CoursePage = async ({
+const CoursePage = async ({
     params
 }: {
     params: { courseId: string }
@@ -27,3 +27,4 @@ export const CoursePage = async ({
     }
     return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`)
 }
+export default CoursePage;

@@ -68,7 +68,7 @@ export const getChapter = async({
                     courseId,
                     isPublished: true,
                     position: {
-                        gte: chapter?.position
+                        gt: chapter?.position
                     }
                 },
                 orderBy: {
