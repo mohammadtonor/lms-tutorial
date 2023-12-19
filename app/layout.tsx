@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider skipFetchCurrentUser={true}>
       <html lang="en">
         <body className={inter.className}>
           <ConfettiProvider />
